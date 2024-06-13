@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Live Cricket Score</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+
+            function getQueryParams() {
+                let params = {};
+                let searchParams = new URLSearchParams(window.location.search);
+                for (let [key, value] of searchParams.entries()) {
+                    params[key] = value;
+                }
+                return params;
+            }
+
+            const params = getQueryParams();
+
+            fetch(`https://principledent422-schedule.vercel.app/schedule?id=${params.id}&date=${params.date}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 0) {
+                        updateSchedule(data.data.epg);
+                    } else {
+                        console.error('Error fetching schedule:', data);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        function updateSchedule(epg) {
+            const tbody = document.querySelector('.table-body');
+
+
+            epg.forEach(item => {
+                const tr = document.createElement('tr');
+
+                const posterTd = document.createElement('td');
+                const img = document.createElement('img');
+                img.src = item.boxCoverImage;
+                img.style.width = '100%';
+                posterTd.appendChild(img);
+
+                const titleTd = document.createElement('td');
+                titleTd.textContent = item.title;
+
+                const timingTd = document.createElement('td');
+                const startTime = new Date(item.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const endTime = new Date(item.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                timingTd.textContent = `${startTime} - ${endTime}`;
+
+                const descTd = document.createElement('td');
+                descTd.textContent = item.desc;
+
+                tr.appendChild(posterTd);
+                tr.appendChild(titleTd);
+                tr.appendChild(timingTd);
+                tr.appendChild(descTd);
+
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="gradient-bg mt-5">
+        <div class="container card gradients-container">
+            <h1 class="display-5">TV Schedule</h1>
+            <br>
+
+
+
+            <div class="table-container rounded">
+                <table class="table team-2 table-hover table-sm table-bordered table-striped">
+
+                    <!-- list of Batters -->
+                    <thead class="table-head">
+                        <tr class="table-dark">
+                            <td class="col-md-2">Poster</td>
+                            <td class="col-md-2">Title</td>
+                            <td class="col-md-2">Timing</td>
+                            <td class="col-md-4">Description</td>
+                        </tr>
+                    </thead>
+                    <tbody class="table-body">
+
+                    </tbody>
+
+
+
+
+
+
+
+
+
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="g1"></div>
+    <div class="g2"></div>
+    <div class="g3"></div>
+    <div class="g4"></div>
+    <div class="g5"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
