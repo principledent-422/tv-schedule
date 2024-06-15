@@ -68,7 +68,7 @@
                 const channelId = channel.id.split('_')
                 col.innerHTML = `
                     <div class="card">
-                        <a href = 'schedule.html?id=${channelId[1]}&date=${getCurrentDate()}'><img class="card-img-top" src="${channel.channelLogo}" alt="${channel.title}"></a>
+                        <a href = 'schedule.html?id=${channelId[1]}&date=${getCurrentDate()}'><img class="card-img-top" src="https://mediaready.videoready.tv/tatasky/image/fetch/f_auto,fl_lossy,q_auto,dpr_1.5,h_150,w_265/${channel.channelLogo}" alt="${channel.title}"></a>
                         <div class="card-body">
                             <p class="card-text">${channel.title}</p>
                         </div>
