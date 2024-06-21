@@ -1,125 +1,277 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>Live Cricket Score</title>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
+    <title>TV Schedule India</title>
 
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+        id="bootstrap-css">
+    <style>
+        table {
+            width: 100%;
+        }
 
-            function getQueryParams() {
-                let params = {};
-                let searchParams = new URLSearchParams(window.location.search);
-                for (let [key, value] of searchParams.entries()) {
-                    params[key] = value;
-                }
-                return params;
+        #example_filter {
+            float: right;
+        }
+
+        #example_paginate {
+            float: right;
+        }
+
+        label {
+            display: inline-flex;
+            margin-bottom: .5rem;
+            margin-top: .5rem;
+
+        }
+
+        /* HTML: <div class="loader"></div> */
+        .loader {
+            width: 50px;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 8px solid #000000;
+            animation:
+                l20-1 0.8s infinite linear alternate,
+                l20-2 1.6s infinite linear;
+        }
+
+        @keyframes l20-1 {
+            0% {
+                clip-path: polygon(50% 50%, 0 0, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%)
             }
 
-            const params = getQueryParams();
+            12.5% {
+                clip-path: polygon(50% 50%, 0 0, 50% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%)
+            }
 
-            fetch(`https://principledent422-schedule.vercel.app/schedule?id=${params.id}&date=${params.date}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.code === 0) {
-                        updateSchedule(data.data.epg);
-                    } else {
-                        console.error('Error fetching schedule:', data);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        });
+            25% {
+                clip-path: polygon(50% 50%, 0 0, 50% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 100%)
+            }
 
-        function updateSchedule(epg) {
-            const tbody = document.querySelector('.table-body');
+            50% {
+                clip-path: polygon(50% 50%, 0 0, 50% 0%, 100% 0%, 100% 100%, 50% 100%, 0% 100%)
+            }
 
+            62.5% {
+                clip-path: polygon(50% 50%, 100% 0, 100% 0%, 100% 0%, 100% 100%, 50% 100%, 0% 100%)
+            }
 
-            epg.forEach(item => {
-                const tr = document.createElement('tr');
+            75% {
+                clip-path: polygon(50% 50%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 50% 100%, 0% 100%)
+            }
 
-                const posterTd = document.createElement('td');
-                const img = document.createElement('img');
-                img.src = `https://mediaready.videoready.tv/tatasky/image/fetch/f_auto,fl_lossy,q_auto,dpr_1.5,h_150,w_265/${item.boxCoverImage}`;
-                img.style.width = '100%';
-                posterTd.appendChild(img);
-
-                const titleTd = document.createElement('td');
-                titleTd.textContent = item.title;
-
-                const timingTd = document.createElement('td');
-                const startTime = new Date(item.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const endTime = new Date(item.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                timingTd.textContent = `${startTime} - ${endTime}`;
-
-                const descTd = document.createElement('td');
-                descTd.textContent = item.desc;
-
-                tr.appendChild(posterTd);
-                tr.appendChild(titleTd);
-                tr.appendChild(timingTd);
-                tr.appendChild(descTd);
-
-                tbody.appendChild(tr);
-            });
+            100% {
+                clip-path: polygon(50% 50%, 50% 100%, 50% 100%, 50% 100%, 50% 100%, 50% 100%, 0% 100%)
+            }
         }
-    </script>
+
+        @keyframes l20-2 {
+            0% {
+                transform: scaleY(1) rotate(0deg)
+            }
+
+            49.99% {
+                transform: scaleY(1) rotate(135deg)
+            }
+
+            50% {
+                transform: scaleY(-1) rotate(0deg)
+            }
+
+            100% {
+                transform: scaleY(-1) rotate(-135deg)
+            }
+        }
+
+
+        .scheduleButtonLoader {
+            height: 4px;
+            width: 130px;
+            --c: no-repeat linear-gradient(#000000 0 0);
+            background: var(--c), var(--c), grey;
+            background-size: 60% 100%;
+            animation: l16 3s infinite;
+        }
+
+        @keyframes l16 {
+            0% {
+                background-position: -150% 0, -150% 0
+            }
+
+            66% {
+                background-position: 250% 0, -150% 0
+            }
+
+            100% {
+                background-position: 250% 0, 250% 0
+            }
+        }
+    </style>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+
+
+    <!-- Custom CSS -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300&display=swap');
+
+        body {
+            font-family: 'Lexend Deca', cursive !important;
+        }
+    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
 
 
 
-    <div class="container card mt-5 pt-3">
+
+    <!-- Navigation -->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html">TV Schedule India</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
 
 
-        <div class="table-container rounded">
-            <table class="table team-2 table-hover table-sm table-bordered table-striped">
-                <div class="card">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Genre
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="genre.html?id=entertainment">Entertainment</a>
+                        <a class="dropdown-item" href="genre.html?id=sports">Sports</a>
+                        <a class="dropdown-item" href="genre.html?id=kids">Kids</a>
+                        <a class="dropdown-item" href="genre.html?id=knowledge">Knowledge</a>
+                        <a class="dropdown-item" href="genre.html?id=lifestyle">Lifestyle</a>
+                        <a class="dropdown-item" href="genre.html?id=music">Music</a>
+                        <a class="dropdown-item" href="genre.html?id=spiritual">Spiritual</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Category
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class='dropdown-item' href='category.html?id=hindi-entertainment'>Hindi Entertainment</a>
+                        <a class='dropdown-item' href='category.html?id=hindi-movies'>Hindi Movies</a>
+                        <a class='dropdown-item' href='category.html?id=english-entertainment'>English
+                            Entertainment</a>
+                        <a class='dropdown-item' href='category.html?id=kids-and-family'>Kids And Family</a>
+                        <a class='dropdown-item' href='category.html?id=music'>Music</a>
+                        <a class='dropdown-item' href='category.html?id=live-sports'>Live Sports</a>
+                    </div>
+                </li>
 
 
-                    <thead class="table-head">
-                        <tr class="table-dark">
-                            <td class="col-md-2">Poster</td>
-                            <td class="col-md-2">Title</td>
-                            <td class="col-md-2">Timing</td>
-                            <td class="col-md-4">Description</td>
-                        </tr>
-                    </thead>
-                    <tbody class="table-body">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Language
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="language.html?id=tamil">Tamil</a>
+                        <a class="dropdown-item" href="language.html?id=telugu">Telugu</a>
+                        <a class="dropdown-item" href="language.html?id=bengali">Bengali</a>
+                        <a class="dropdown-item" href="language.html?id=marathi">Marathi</a>
+                        <a class="dropdown-item" href="language.html?id=malayalam">Malayalam</a>
+                        <a class="dropdown-item" href="language.html?id=kannada">Kannada</a>
+                        <a class="dropdown-item" href="language.html?id=marathi">Marathi</a>
+                        <a class="dropdown-item" href="language.html?id=odia">Odia</a>
+                    </div>
+                </li>
 
-                    </tbody>
-            </table>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" action="search.html">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="query"
+                    name="query" autocomplete="off">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
         </div>
-    </div>
-    </div>
+        </div>
+    </nav>
 
 
+    <div class="container mt-4">
 
-    <div id="channelContainer" class="container mt-3">
 
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Loading</h5>
-                <p class="card-text">Please Wait...</p>
+        <h2 id="scheduleTitle">
+            Schedule</h2>
+        </br>
+
+
+        <div class="mb-5">
+
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" id="scheduleButtons">
+
+                <div class="scheduleButtonLoader"></div>
+
+                <div class="btn-group mr-2" role="group" aria-label="First group" id="previousButtons">
+
+
+                </div>
+
+
+                <div class="btn-group mr-2" role="group" aria-label="Second group" id="nextButtons">
+
+                </div>
+
             </div>
         </div>
 
+        <div class="row mt-2" id="scheduleContainer">
+
+            <div class="card" style="width: 100%">
+                <div class="card-body">
+                    <div class="loader"></div>
+
+                </div>
+            </div>
+
+
+        </div>
+
 
     </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+
+    <!-- Footer -->
+    <footer class="bg-light py-3">
+        <div class="container text-center">
+            <p>Copyright &copy; TV Schedule India - Your Ultimate Guide to BEST of Indian TV</p>
+        </div>
+    </footer>
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+
+    <script src="script.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
 </body>
 
 </html>
