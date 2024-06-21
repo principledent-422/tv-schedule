@@ -3,31 +3,35 @@
 document.addEventListener("DOMContentLoaded", function () {
     const currentPath = window.location.pathname;
     const filename = find_filename(currentPath)
+
+
     console.log(filename)
 
-    if (filename === '/' || filename === 'index.html') {
-        handleMainPage();
-    }
 
-    else if (filename === '/schedule' || filename === 'schedule.html') {
+
+    if (filename.includes('schedule')) {
         handleSchedulePage();
     }
 
-    else if (filename === '/genre' || filename === 'genre.html') {
+    else if (filename.includes('genre')) {
         handleGenrePage();
     }
 
-    else if (filename === '/category' || filename === 'category.html') {
+    else if (filename.includes('category')) {
         handleCategoryPage();
     }
 
-    else if (filename === '/language' || filename === 'language.html') {
+    else if (filename.includes('language')) {
         handleLanguagePage();
     }
 
 
-    else if (filename === '/search' || filename === 'search.html') {
+    else if (filename.includes('search')) {
         handleSearchPage();
+    }
+
+    else {
+        handleMainPage();
     }
 
 
