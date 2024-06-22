@@ -324,6 +324,7 @@ function renderSchedulePage(data, params) {
             `;
         }
 
+
         scheduleContainer.innerHTML += `
            <div class="col-md-3" bis_skin_checked="1">
                 <div class="card" bis_skin_checked="1">
@@ -337,7 +338,7 @@ function renderSchedulePage(data, params) {
                     </div>
 
 
-                    <div class="card-body" bis_skin_checked="1">
+                    <div class="card" bis_skin_checked="1">
                         <h5 class="card-title">${epg.title}</h5>
                         
                     <p class="card-text">${getReadableTimeStartStop(epg.startTime, epg.endTime)}</p>
