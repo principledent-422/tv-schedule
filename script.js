@@ -175,7 +175,7 @@ function getCurrentDate() {
 
 async function fetchData(path) {
 
-    const API_PATH = 'https://principledent422-schedule.vercel.app'
+    const API_PATH = 'https://principledent422-schedule-api.vercel.app'
     // https://principledent422-schedule.vercel.app/category?id=hindi-entertainment
     const url = `${API_PATH}${path}`
 
