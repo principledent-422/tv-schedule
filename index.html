@@ -6,6 +6,8 @@
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
         id="bootstrap-css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         table {
             width: 100%;
@@ -101,9 +103,7 @@
         body {
             font-family: 'Lexend Deca', cursive !important;
         }
-    </style>
 
-    <style>
         .dropdown-menu {
             right: 0;
             /* Align the dropdown menu to the right of the parent container */
@@ -111,6 +111,8 @@
             /* Prevent left alignment */
         }
     </style>
+
+
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -132,6 +134,10 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="index.html">Home</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="channel-listing.html">TV Channels Listing</a>
+                </li>
+
 
 
                 <li class="nav-item dropdown">
@@ -211,19 +217,84 @@
     </nav>
 
 
-    <div class="container mt-4">
+
+    <div class="container my-5">
 
 
-        <h2>
-            All Channels</h2>
-        </br>
 
-        <div class="row mt-2" id="channelContainer">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center mb-4">TV Schedule India</h2>
+                <p class="lead text-center">Your Ultimate Guide to BEST of Indian TV</p>
+            </div>
+        </div>
 
-            <div class="card" style="width: 100%">
-                <div class="card-body">
-                    <div class="loader"></div>
 
+
+        <div id="bookmarkChannelAiringShowDetailContainer">
+
+
+        </div>
+
+
+        <div id="bookmarkToast" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+
+            <div id="toastMessage">
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card mt-4" style="padding: 20px;">
+            <div class="card-title">
+                <h5>Features</h5>
+            </div>
+
+            <div class="row mt-2">
+
+
+
+
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Channel Listings</h5>
+                            <p class="card-text">List all the channels and view detailled schedule.
+                            </p>
+                            <a href="channel-listing.html" class="btn btn-primary">Channel Listing</a>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Categorize with Genre</h5>
+                            <p class="card-text">Get list of channels from your favourite Genre.
+
+                            </p>
+                            <a href="genre.html?id=entertainment" class="btn btn-primary">Entertainment
+                                Genre</a>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Categorize with Language</h5>
+                            <p class="card-text">Get list of channels from your spoken language.
+
+                            </p>
+                            <a href="language.html?id=marathi" class="btn btn-primary">Marathi Language</a>
+
+
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -231,7 +302,152 @@
         </div>
 
 
+        <div class="card mt-4" style="padding: 20px;">
+            <div class="card-title">
+                <h5>Login to get access to features like:</h5>
+            </div>
+
+            <div class="row mt-2">
+
+
+
+
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Bookmark channels</h5>
+                            <p class="card-text">View your Bookmarked channel directly at the home page!
+                            </p>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">See Episode Numbers</h5>
+                            <p class="card-text">Explore detailed episode listings and catch up on your favorite
+                                series.
+                            </p>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">See Channel Number</h5>
+                            <p class="card-text">Check on which channel your favourite shows are airing on.
+                            </p>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="row mt-2">
+
+
+
+
+                <div class="col-sm-4">
+                    <div class="card" bis_skin_checked="1">
+
+                        <div style="position: relative;">
+
+
+                            <span
+                                style="position: absolute; top: 10px; right: 10px; background-color: #007bff; color: white; padding: 5px; border-radius: 5px; font-size: 12px;">HD</span>
+
+                            <span data-channel-id="8"
+                                style="position: absolute; top: 10px; left: 10px; background-color: #007bff; color: white; padding: 5px; border-radius: 5px; font-size: 12px; cursor: pointer;"
+                                onclick="bookmarkChannelDemo(8, 'STAR Plus HD')">
+                                <i class="fas fa-bookmark" style="margin-left: 3px; margin-right: 3px;"></i>
+                            </span>
+
+                            <img src="https://mediaready.videoready.tv/tatasky/image/fetch/f_auto,fl_lossy,q_auto,dpr_1.5,h_150,w_265/https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/imageContent-25308-jhrhfs34-v1/imageContent-25308-jhrhfs34-m1.png"
+                                class="card-img-top" alt="STAR Plus HD">
+
+                        </div>
+
+                        <div class="card-body" bis_skin_checked="1">
+                            <h5 class="card-title" style="margin-bottom: 25px;">Stra Plus HD</h5>
+
+
+                            <a href="schedule.html?id=8&amp;date=25-06-2024" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+
+                        <div style="position: relative;">
+
+                            <span
+                                style="position: absolute; top: 10px; right: 10px; background-color: #007bff; color: white; padding: 5px; border-radius: 5px; font-size: 12px;">E1009</span>
+
+                            <img src="https://mediaready.videoready.tv/tatasky/image/fetch/f_auto,fl_lossy,q_auto,dpr_1.5,h_150,w_265/http://imagestataplay.whatsonindia.com/dasimages/landscape/1280x720/2A4856F2BC2E80B094866C2BA009234F588C26CB1.jpg"
+                                class="card-img-top" alt="Wagle Ki Duniya">
+
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title">Wagle Ki Duniya</h5>
+                            <p class="card-text" style="margin-bottom: 26px;">08:30 AM - 09:00 AM
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="card" bis_skin_checked="1">
+                        <div style="position: relative;">
+
+                            <span data-channel-id="113"
+                                style="position: absolute; top: 10px; left: 10px; background-color: #007bff; color: white; padding: 5px; border-radius: 5px; font-size: 12px; cursor: pointer;"
+                                onclick="bookmarkChannelDemo(113, 'Discovery Science')">
+                                <i class="fas fa-bookmark" style="margin-left: 3px; margin-right: 3px;"></i>
+                            </span>
+
+                            <img src="https://mediaready.videoready.tv/tatasky/image/fetch/f_auto,fl_lossy,q_auto,dpr_1.5,h_150,w_265/http://imagestataplay.whatsonindia.com/dasimages/landscape/1280x720/E6A23F25A72A8B0D9F54754CD857DA0EE5465BADL.jpg"
+                                class="card-img-top">
+                        </div>
+                        <div class="card-body" bis_skin_checked="1">
+                            <h5 class="card-title">Discovery Science</h5>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="card-text">CH 719 <img
+                                        src="https://play-lh.googleusercontent.com/PTLQRc7a8vRjs8fmM7hRI36s7gGYalxIFd80xZDvYkIl91d709fcl4-UH9vZbxWDGG8"
+                                        style="max-width: 25px; height: auto; margin-left: 10px;" class="img-fluid"></p>
+                            </div>
+                            <br>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
     </div>
+
+
+
+
+
+
+
 
     <!-- Footer -->
     <footer class="bg-light py-3">
