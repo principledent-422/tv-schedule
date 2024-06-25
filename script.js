@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     else if (filename.includes('logout')) {
 
-        logoutUser()
+        logoutUser();
     }
     else if (filename.includes('channel-listing')) {
 
@@ -67,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             handleMainPage();
         }
+        updateCarousel();
     }
 
 
@@ -79,7 +80,7 @@ function sendBookmarkUpdateNotification(message, bootstrapClass) {
     document.querySelector('#toastMessage').innerHTML = `
     
     <div class="alert alert-${bootstrapClass} alert-dismissible fade show" role="alert">
-        ${message}
+        <strong>${bootstrapClass.toUpperCase()}</strong> ${message}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -320,90 +321,103 @@ async function fetchData(path) {
 }
 
 
-async function getChannelDetail(channelId) {
+async function updateCarousel() {
+    const mainCarousel = document.querySelector("#mainCarousel")
+    const data = await fetchData("/get-hero-banner")
 
+    data.forEach((item, index) => {
+        let extraClass = "";
 
-    try {
-        const response = await fetch(`https://tm.tapi.videoready.tv/content-detail/pub/api/v6/channels/${channelId}?platform=WEB`, {
-            headers: {
-                'accept': '*/*',
-                'accept-language': 'en,en-US;q=0.9,en-IN;q=0.8',
-                'device_details': '{"pl":"web","os":"WINDOWS","lo":"en-us","app":"1.41.19","dn":"PC","bv":126,"bn":"CHROME","device_id":"cf7978c56ec3e3859b70715dfc97800f","device_type":"WEB","device_platform":"PC","device_category":"open","manufacturer":"WINDOWS_CHROME_126","model":"PC","sname":""}',
-                'locale': 'ENG',
-                'origin': 'https://watch.tataplay.com',
-                'platform': 'web',
-                'priority': 'u=1, i',
-                'referer': 'https://watch.tataplay.com/',
-                'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
-                'sec-ch-ua-mobile': '?0',
-                'sec-ch-ua-platform': '"Windows"',
-                'sec-fetch-dest': 'empty',
-                'sec-fetch-mode': 'cors',
-                'sec-fetch-site': 'cross-site',
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
-            }
-        });
-
-
-        const data = await response.json();
-
-        return data;
-    }
-
-    catch (error) {
-        console.error('Error fetching data:', error);
-    }
-
-
+        if (index === 1) {
+            extraClass = " active"
+        }
+        mainCarousel.innerHTML += `
+        <div class="carousel-item${extraClass}">
+            <a href="schedule.html?id=${item.channelId}&date=${getCurrentDate()}"><img
+                    src="https://mediaready.videoready.tv/tatasky/image/fetch/f_auto,fl_lossy,q_auto,dpr_1.5,h_432,w_1440/${item.image}"
+                    class="d-block w-100" alt="${item.channelName}">
+            </a>
+        </div>
+        `
+    })
 
 }
 
 
 async function handleMainPage() {
+
+    const loginToUseFeatures = document.querySelector('#loginToUseFeatures')
+    loginToUseFeatures.remove()
+
     const bookmarkChannelAiringShowDetailContainer = document.querySelector("#bookmarkChannelAiringShowDetailContainer");
 
     bookmarkChannelAiringShowDetailContainer.innerHTML = `
     <div class = "loader"></div>`;
-    const bookmarkChannelIds = localStorage.getItem('bookmarkChannelIds').split("+")
-    const bookmarkList = bookmarkChannelIds.filter(part => part !== "");
-    let randomIndex = Math.floor(Math.random() * bookmarkList.length);
-    let randomChannelId = bookmarkList[randomIndex];
+    let bookmarkChannelIds
+    bookmarkChannelIds = localStorage.getItem('bookmarkChannelIds')
 
-    const response = await fetchData(`/get-content-details?channelId=${randomChannelId}`)
-    const data = response.data
-    console.log(data)
-    const meta = data.meta[0]
-    const channelMeta = data.channelMeta
+    if (bookmarkChannelIds == null || bookmarkChannelIds === "") {
 
-    bookmarkChannelAiringShowDetailContainer.innerHTML = "";
-
-    bookmarkChannelAiringShowDetailContainer.innerHTML = `
-
-    
-    <div class="card" id="bookmarkChannelAiringShowDetail" style="opacity: 95%;">
-            
-    
-        <div class="row g-0">
-            <div class="col-md-2" style="max-width:200px">
-                <img src="${meta.boxCoverImage}" width='100%'
-                    style='float:left;margin:20px;'>
-            </div>
-            <div class="col-md-7">
-                <div class="card-body" style="background:transparent">
-                    <h5 class="card-title">${meta.title}</h5>
-                    <p class="card-text">${meta.description}</p>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <img src="${channelMeta.logo}" width='100%'
-                    style='float:left;margin:20px;'>
-            </div>
+        bookmarkChannelAiringShowDetailContainer.innerHTML = `
+        <div class="card">
+        <div class="card-body">
+            Start Adding Bookmarks...
         </div>
+        </div>
+        `
+    }
 
-    </div>
-    `
+    else {
+        const bookmarkChannelIds = localStorage.getItem('bookmarkChannelIds').split("+")
+        const bookmarkList = bookmarkChannelIds.filter(part => part !== "");
+        let randomIndex = Math.floor(Math.random() * bookmarkList.length);
+        let randomChannelId = bookmarkList[randomIndex];
+
+        const response = await fetchData(`/get-content-details?channelId=${randomChannelId} `)
+        const data = response.data
+        console.log(data)
+        const meta = data.meta[0]
+        const channelMeta = data.channelMeta
+
+        bookmarkChannelAiringShowDetailContainer.innerHTML = "";
+
+
+
+        bookmarkChannelAiringShowDetailContainer.innerHTML = `
+    
+     <div class="card mb-4">
+        <div class="card-body">
+            <h5>Currenlty airing on one of your bookmarked channel</h5>
+        </div>
+        </div>
+                <div class="card" id = "bookmarkChannelAiringShowDetail" style = "opacity: 95%;">
+    
+    
+                    <div class="row g-0">
+                        <div class="col-md-2" style="max-width:200px">
+                            <img src="${meta.boxCoverImage}" width='100%'
+                                style='float:left;margin:20px;'>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body" style="background:transparent">
+                                <h5 class="card-title">${meta.title}</h5>
+                                <p class="card-text">${meta.description}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <img src="${channelMeta.logo}" width='100%'
+                                style='float:left;margin:20px;'>
+                        </div>
+                    </div>
+    
+        </div >
+                `
+    }
+
+
 
 }
+
 
 
 async function handleChannelListingPage() {
