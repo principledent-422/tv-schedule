@@ -314,14 +314,26 @@ async function loginUser(userid) {
 
         localStorage.setItem(key, value);
     }
-    // const redirectURL = `${window.location.pathname.split["/"]}`
-    window.location.href = window.location.pathname.replace("login", "index")
+    if (window.location.pathname.includes('html')){
+        window.location.href = window.location.pathname.replace("login.html", "index.html")
+    }
+    else{
+
+        window.location.href = window.location.pathname.replace("login", "index")
+    }
 }
 
 
 function logoutUser() {
     localStorage.clear();
-    window.location.href = window.location.pathname.replace("logout", "index")
+
+    if (window.location.pathname.includes('html')){
+        window.location.href = window.location.pathname.replace("logout.html", "index.html")
+    }
+    else{
+
+        window.location.href = window.location.pathname.replace("logout", "index")
+    }
 }
 
 function renderHomePageChannels(channels) {
