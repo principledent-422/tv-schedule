@@ -1,11 +1,8 @@
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const currentPath = window.location.pathname;
     const filename = find_filename(currentPath)
 
 
-    console.log(filename)
 
     if (checkLogin() && !filename.includes('logout') && !filename.includes('login')) {
 
@@ -16,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
         navProfilePicture.innerHTML = `
          <img src="${localStorage.getItem('picture')}" width="30" height="30"
                     alt="">
-        `
+        `;
     }
     else {
         const navProfilePicture = document.querySelector('#navProfilePicture');
@@ -31,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
     }
+
 
     if (filename.includes('schedule')) {
         handleSchedulePage();
@@ -57,16 +55,113 @@ document.addEventListener("DOMContentLoaded", function () {
         handleLoginPage();
     }
     else if (filename.includes('logout')) {
-        console.log("logout page")
+
         logoutUser()
     }
+    else if (filename.includes('channel-listing')) {
+
+        handleChannelListingPage()
+    }
     else {
-        handleMainPage();
+        if (checkLogin()) {
+
+            handleMainPage();
+        }
     }
 
 
 
 });
+
+function sendBookmarkUpdateNotification(message, bootstrapClass) {
+
+
+    document.querySelector('#toastMessage').innerHTML = `
+    
+    <div class="alert alert-${bootstrapClass} alert-dismissible fade show" role="alert">
+        ${message}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    `;
+
+    $('#bookmarkToast').toast({ delay: 1800 });
+    $('#bookmarkToast').toast('show');
+
+
+}
+
+
+function bookmarkChannelDemo(channelId, channelName) {
+    if (checkLogin()) {
+        bookmarkChannel(channelId, channelName);
+    }
+    else {
+        sendBookmarkUpdateNotification("Login to use this Feature", "danger");
+    }
+}
+
+function bookmarkChannel(channelId, channelName) {
+
+    if (!checkLogin()) {
+        sendBookmarkUpdateNotification("Login to use this Feature", "danger");
+    }
+
+    else {
+
+        const bookmarkChannelIds = localStorage.getItem('bookmarkChannelIds');
+        const bookmarkLimit = 10;
+        let bookmarkLenght;
+
+        try {
+            bookmarkLenght = bookmarkChannelIds.split("+").length;
+        } catch {
+            bookmarkLenght = 0;
+        }
+
+        const bookmarkButton = document.querySelector(`[data-channel-id="${channelId}"]`);
+
+        if (bookmarkLenght >= bookmarkLimit && (!bookmarkChannelIds || !bookmarkChannelIds.includes(channelId))) {
+            const message = "Limit reached for adding bookmarks";
+            const color = "danger";
+            sendBookmarkUpdateNotification(message, color);
+        }
+        else {
+
+            if (bookmarkChannelIds === null) {
+                const newValue = channelId.toString();
+                localStorage.setItem('bookmarkChannelIds', newValue);
+                const message = `${channelName} bookmarked successfully`;
+                const color = "success";
+                sendBookmarkUpdateNotification(message, color);
+                bookmarkButton.style.backgroundColor = "green";
+            }
+            else {
+                const bookmarksArray = bookmarkChannelIds.split("+");
+                const index = bookmarksArray.indexOf(channelId.toString());
+                if (index === -1) {
+                    bookmarksArray.push(channelId);
+                    localStorage.setItem('bookmarkChannelIds', bookmarksArray.join("+"));
+                    const message = `${channelName} bookmarked successfully`;
+                    const color = "success";
+                    sendBookmarkUpdateNotification(message, color);
+                    bookmarkButton.style.backgroundColor = "green";
+                } else {
+                    bookmarksArray.splice(index, 1);
+                    localStorage.setItem('bookmarkChannelIds', bookmarksArray.join("+"));
+                    const message = `${channelName} unbookmarked successfully`;
+                    const color = "warning";
+                    sendBookmarkUpdateNotification(message, color);
+                    bookmarkButton.style.backgroundColor = "#007bff";
+                }
+            }
+        }
+    }
+
+
+}
+
 
 
 function buildScheduleButtons(params) {
@@ -224,7 +319,94 @@ async function fetchData(path) {
 
 }
 
+
+async function getChannelDetail(channelId) {
+
+
+    try {
+        const response = await fetch(`https://tm.tapi.videoready.tv/content-detail/pub/api/v6/channels/${channelId}?platform=WEB`, {
+            headers: {
+                'accept': '*/*',
+                'accept-language': 'en,en-US;q=0.9,en-IN;q=0.8',
+                'device_details': '{"pl":"web","os":"WINDOWS","lo":"en-us","app":"1.41.19","dn":"PC","bv":126,"bn":"CHROME","device_id":"cf7978c56ec3e3859b70715dfc97800f","device_type":"WEB","device_platform":"PC","device_category":"open","manufacturer":"WINDOWS_CHROME_126","model":"PC","sname":""}',
+                'locale': 'ENG',
+                'origin': 'https://watch.tataplay.com',
+                'platform': 'web',
+                'priority': 'u=1, i',
+                'referer': 'https://watch.tataplay.com/',
+                'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"Windows"',
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'cross-site',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
+            }
+        });
+
+
+        const data = await response.json();
+
+        return data;
+    }
+
+    catch (error) {
+        console.error('Error fetching data:', error);
+    }
+
+
+
+}
+
+
 async function handleMainPage() {
+    const bookmarkChannelAiringShowDetailContainer = document.querySelector("#bookmarkChannelAiringShowDetailContainer");
+
+    bookmarkChannelAiringShowDetailContainer.innerHTML = `
+    <div class = "loader"></div>`;
+    const bookmarkChannelIds = localStorage.getItem('bookmarkChannelIds').split("+")
+    const bookmarkList = bookmarkChannelIds.filter(part => part !== "");
+    let randomIndex = Math.floor(Math.random() * bookmarkList.length);
+    let randomChannelId = bookmarkList[randomIndex];
+
+    const response = await fetchData(`/get-content-details?channelId=${randomChannelId}`)
+    const data = response.data
+    console.log(data)
+    const meta = data.meta[0]
+    const channelMeta = data.channelMeta
+
+    bookmarkChannelAiringShowDetailContainer.innerHTML = "";
+
+    bookmarkChannelAiringShowDetailContainer.innerHTML = `
+
+    
+    <div class="card" id="bookmarkChannelAiringShowDetail" style="opacity: 95%;">
+            
+    
+        <div class="row g-0">
+            <div class="col-md-2" style="max-width:200px">
+                <img src="${meta.boxCoverImage}" width='100%'
+                    style='float:left;margin:20px;'>
+            </div>
+            <div class="col-md-7">
+                <div class="card-body" style="background:transparent">
+                    <h5 class="card-title">${meta.title}</h5>
+                    <p class="card-text">${meta.description}</p>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <img src="${channelMeta.logo}" width='100%'
+                    style='float:left;margin:20px;'>
+            </div>
+        </div>
+
+    </div>
+    `
+
+}
+
+
+async function handleChannelListingPage() {
 
 
     const data = await fetchData("/channels?limit=60");
@@ -259,6 +441,7 @@ async function handleCategoryPage() {
     const params = getQueryParams();
 
     const data = await fetchData(`/category?id=${params.id}`);
+    console.log(data)
 
     renderCategoryPage(data, params.id);
 
@@ -314,10 +497,10 @@ async function loginUser(userid) {
 
         localStorage.setItem(key, value);
     }
-    if (window.location.pathname.includes('html')){
+    if (window.location.pathname.includes('html')) {
         window.location.href = window.location.pathname.replace("login.html", "index.html")
     }
-    else{
+    else {
 
         window.location.href = window.location.pathname.replace("login", "index")
     }
@@ -327,10 +510,10 @@ async function loginUser(userid) {
 function logoutUser() {
     localStorage.clear();
 
-    if (window.location.pathname.includes('html')){
+    if (window.location.pathname.includes('html')) {
         window.location.href = window.location.pathname.replace("logout.html", "index.html")
     }
-    else{
+    else {
 
         window.location.href = window.location.pathname.replace("logout", "index")
     }
@@ -340,6 +523,8 @@ function renderHomePageChannels(channels) {
     const channelContainer = document.querySelector("#channelContainer");
 
     channelContainer.innerHTML = "";
+
+    const bookmarkChannelIds = localStorage.getItem('bookmarkChannelIds') ? localStorage.getItem('bookmarkChannelIds').split("+") : [];
 
     channels.forEach((channel, index) => {
 
@@ -354,6 +539,22 @@ function renderHomePageChannels(channels) {
              <span style="position: absolute; top: 10px; right: 10px; background-color: #007bff; color: white; padding: 5px; border-radius: 5px; font-size: 12px;">HD</span>
             `;
         }
+
+
+        let bookmarkHTML = "";
+
+        const isBookmarked = bookmarkChannelIds.includes(channel.id.toString()) && checkLogin();
+        const bookmarkColor = isBookmarked ? "green" : "#007bff";
+
+        bookmarkHTML = `
+            <span data-channel-id="${channel.id}" style="position: absolute; top: 10px; left: 10px; background-color: ${bookmarkColor}; color: white; padding: 5px; border-radius: 5px; font-size: 12px; cursor: pointer;" onclick="bookmarkChannel(${channel.id}, '${channel.title}')">
+                    <i class="fas fa-bookmark" style="margin-left: 3px; margin-right: 3px;"></i> 
+            </span>
+        `;
+
+        hd_html += bookmarkHTML;
+
+
 
         channelContainer.innerHTML += `
             <div class="col-md-2" bis_skin_checked="1">
@@ -401,30 +602,38 @@ function renderSchedulePage(data, params) {
             `;
         }
 
+        let episodeHTMLFinal = '';
+
+        if (checkLogin()) {
+            episodeHTMLFinal = episodeHTML
+        }
+
 
         scheduleContainer.innerHTML += `
-           <div class="col-md-3" bis_skin_checked="1">
-                <div class="card" bis_skin_checked="1">
+         <div class="col-md-3 mt-4">
+        <div class="card">
 
-
-
-                    <div style="position: relative;">
-                    ${episodeHTML}
-                        <img src="https://mediaready.videoready.tv/tatasky/image/fetch/f_auto,fl_lossy,q_auto,dpr_1.5,h_150,w_265/${epg.boxCoverImage}" class="card-img-top" alt="${epg.title}">
+            <div style="position: relative;">
+                    ${episodeHTMLFinal}
+                <img src="https://mediaready.videoready.tv/tatasky/image/fetch/f_auto,fl_lossy,q_auto,dpr_1.5,h_150,w_265/${epg.boxCoverImage}" class="card-img-top" alt="${epg.title}">
                     
-                    </div>
-
-
-                    <div class="card" bis_skin_checked="1">
-                        <h5 class="card-title">${epg.title}</h5>
-                        
-                    <p class="card-text">${getReadableTimeStartStop(epg.startTime, epg.endTime)}</p>
-                    </div>
-
-                </div>
             </div>
-        `;
+
+
+            <div class="card-body">
+                <h5 class="card-title">${epg.title}</h5>
+                <p class="card-text">${getReadableTimeStartStop(epg.startTime, epg.endTime)}
+                </p>
+                
+            </div>
+        </div>
+    </div>
+        `
     });
+
+
+
+
 }
 
 
@@ -434,50 +643,59 @@ function renderGenrePage(data, genreId) {
     genreTitle.textContent = `Genre - ${slugToText(genreId)}`
     genreContainer.innerHTML = "";
 
+    const bookmarkChannelIds = localStorage.getItem('bookmarkChannelIds') ? localStorage.getItem('bookmarkChannelIds').split("+") : [];
 
-
-
-
-    data.forEach((genre, index) => {
-
+    data.forEach((genre) => {
         let hd_html = '';
-
 
         if (genre.channelMeta.hd) {
             hd_html = `
-            
-             <span style="position: absolute; top: 10px; right: 10px; background-color: #007bff; color: white; padding: 5px; border-radius: 5px; font-size: 12px;">HD</span>
+                <span style="position: absolute; top: 10px; right: 10px; background-color: #007bff; color: white; padding: 5px; border-radius: 5px; font-size: 12px;">HD</span>`;
+        }
+
+        let channelHTML = "";
+        if (checkLogin()) {
+            channelHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="card-text">CH ${genre.channelMeta.channelNumber} <img src="https://play-lh.googleusercontent.com/PTLQRc7a8vRjs8fmM7hRI36s7gGYalxIFd80xZDvYkIl91d709fcl4-UH9vZbxWDGG8" style="max-width: 25px; height: auto; margin-left: 10px;" class="img-fluid"></p>
+                </div>
+                <br />
             `;
         }
+
+        let bookmarkHTML = "";
+        const isBookmarked = bookmarkChannelIds.includes(genre.channelMeta.id.toString()) && checkLogin();
+        const bookmarkColor = isBookmarked ? "green" : "#007bff";
+
+        bookmarkHTML = `
+            <span data-channel-id="${genre.channelMeta.id}" style="position: absolute; top: 10px; left: 10px; background-color: ${bookmarkColor}; color: white; padding: 5px; border-radius: 5px; font-size: 12px; cursor: pointer;" onclick="bookmarkChannel(${genre.channelMeta.id}, '${genre.channelMeta.channelName}')">
+                    <i class="fas fa-bookmark" style="margin-left: 3px; margin-right: 3px;"></i> 
+            </span>
+        `;
+
+        hd_html += bookmarkHTML;
 
 
         genreContainer.innerHTML += `
            <div class="col-md-3" bis_skin_checked="1">
                 <div class="card" bis_skin_checked="1">
-
-
-
-                <div style="position: relative;">
-    ${hd_html}
-                    <img src="https://mediaready.videoready.tv/tatasky/image/fetch/f_auto,fl_lossy,q_auto,dpr_1.5,h_150,w_265/${genre.meta[0].boxCoverImage}" class="card-img-top">
-                </div>
-
-
+                    <div style="position: relative;">
+                        ${hd_html}
+                        <img src="https://mediaready.videoready.tv/tatasky/image/fetch/f_auto,fl_lossy,q_auto,dpr_1.5,h_150,w_265/${genre.meta[0].boxCoverImage}" class="card-img-top">
+                    </div>
                     <div class="card-body" bis_skin_checked="1">
                         <h5 class="card-title">${genre.channelMeta.channelName}</h5>
-                        
                         <p class="card-text">${genre.meta[0].title}</p>
+                        ${channelHTML}
                         <p class="card-text">${getReadableTimeStartStop(genre.meta[0].startTime, genre.meta[0].endTime)}</p>
-
                         <a href="schedule.html?id=${genre.channelMeta.id}&date=${getCurrentDate()}" class="btn btn-primary">View Details</a>
-
                     </div>
-
                 </div>
             </div>
         `;
     });
 }
+
 
 
 
@@ -489,6 +707,9 @@ function renderCategoryPage(data, categoryId) {
 
     // Removing the loader
     categoryContainer.innerHTML = "";
+
+    const bookmarkChannelIds = localStorage.getItem('bookmarkChannelIds') ? localStorage.getItem('bookmarkChannelIds').split("+") : [];
+
 
 
 
@@ -507,6 +728,35 @@ function renderCategoryPage(data, categoryId) {
             `;
         }
 
+
+
+        let channelHTML = "";
+
+        if (checkLogin()) {
+            channelHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+                <p class="card-text">CH ${category.channelNumber} <img src="https://play-lh.googleusercontent.com/PTLQRc7a8vRjs8fmM7hRI36s7gGYalxIFd80xZDvYkIl91d709fcl4-UH9vZbxWDGG8" style="max-width: 25px; height: auto; margin-left: 10px;" class="img-fluid"></p>
+               
+            </div>
+            <br />
+            `
+        }
+
+        let bookmarkHTML = "";
+        const isBookmarked = bookmarkChannelIds.includes(category.id.toString()) && checkLogin();
+
+        const bookmarkColor = isBookmarked ? "green" : "#007bff";
+
+        bookmarkHTML = `
+            <span data-channel-id="${category.id}" style="position: absolute; top: 10px; left: 10px; background-color: ${bookmarkColor}; color: white; padding: 5px; border-radius: 5px; font-size: 12px; cursor: pointer;" onclick="bookmarkChannel(${category.id}, '${category.channelName}')">
+                    <i class="fas fa-bookmark" style="margin-left: 3px; margin-right: 3px;"></i> 
+            </span>
+        `;
+
+        hd_html += bookmarkHTML;
+
+
+
         categoryContainer.innerHTML += `
            <div class="col-md-3" bis_skin_checked="1">
                 <div class="card" bis_skin_checked="1">
@@ -522,7 +772,10 @@ function renderCategoryPage(data, categoryId) {
                         <h5 class="card-title">${category.channelName}</h5>
                         
                         <p class="card-text">${category.title}</p>
+                        ${channelHTML}
                         <p class="card-text">${getReadableTimeStartStop(category.airStartDate, category.airStartDate)}</p>
+
+                        
 
                         <a href="schedule.html?id=${category.id}&date=${getCurrentDate()}" class="btn btn-primary">View Details</a>
 
@@ -543,6 +796,8 @@ function renderLanguagePage(data, languageId) {
     languageTitle.textContent = `Language - ${slugToText(languageId)}`
 
     languageContainer.innerHTML = "";
+    const bookmarkChannelIds = localStorage.getItem('bookmarkChannelIds') ? localStorage.getItem('bookmarkChannelIds').split("+") : [];
+
 
 
 
@@ -560,6 +815,34 @@ function renderLanguagePage(data, languageId) {
             `;
         }
 
+        let channelNumberHTML = "";
+
+        if (checkLogin()) {
+            channelNumberHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+                <p class="card-text">CH ${item.channelNumber} <img src="https://play-lh.googleusercontent.com/PTLQRc7a8vRjs8fmM7hRI36s7gGYalxIFd80xZDvYkIl91d709fcl4-UH9vZbxWDGG8" style="max-width: 25px; height: auto; margin-left: 10px;" class="img-fluid"></p>
+               
+            </div>
+            <br />
+            `;
+        }
+
+        let bookmarkHTML = "";
+        const isBookmarked = bookmarkChannelIds.includes(item.channelId.toString()) && checkLogin();
+        const bookmarkColor = isBookmarked ? "green" : "#007bff";
+
+        bookmarkHTML = `
+            <span data-channel-id="${item.channelId}" style="position: absolute; top: 10px; left: 10px; background-color: ${bookmarkColor}; color: white; padding: 5px; border-radius: 5px; font-size: 12px; cursor: pointer;" onclick="bookmarkChannel(${item.channelId}, '${item.channelName}')">
+                    <i class="fas fa-bookmark" style="margin-left: 3px; margin-right: 3px;"></i> 
+            </span>
+        `;
+
+        hd_html += bookmarkHTML;
+
+
+
+
+
         languageContainer.innerHTML += `
            <div class="col-md-3" bis_skin_checked="1">
                 <div class="card" bis_skin_checked="1">
@@ -575,6 +858,7 @@ function renderLanguagePage(data, languageId) {
                         <h5 class="card-title">${item.channelName}</h5>
                         
                         <p class="card-text">${item.title}</p>
+                        ${channelNumberHTML}
                         <p class="card-text">${getReadableTimeStartStop(item.airStartDate, item.airStartDate)}</p>
 
                         <a href="schedule.html?id=${item.channelId}&date=${getCurrentDate()}" class="btn btn-primary">View Details</a>
@@ -595,6 +879,9 @@ function renderSearchPage(channels, searchQuery) {
     searchTitle.textContent = `Search query for ${slugToText(searchQuery)}`
     searchContainer.innerHTML = "";
 
+    const bookmarkChannelIds = localStorage.getItem('bookmarkChannelIds') ? localStorage.getItem('bookmarkChannelIds').split("+") : [];
+
+
     channels.forEach((channel, index) => {
 
 
@@ -609,7 +896,36 @@ function renderSearchPage(channels, searchQuery) {
             `;
         }
 
+        let channelNumberHTML = "";
+
+        if (checkLogin()) {
+            channelNumberHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+                <p class="card-text">CH ${channel.channelNumber} <img src="https://play-lh.googleusercontent.com/PTLQRc7a8vRjs8fmM7hRI36s7gGYalxIFd80xZDvYkIl91d709fcl4-UH9vZbxWDGG8" style="max-width: 25px; height: auto; margin-left: 10px;" class="img-fluid"></p>
+               
+            </div>
+            <br />
+            `;
+        }
+
         const channelId = channel.id.split("_")
+
+        let bookmarkHTML = "";
+        const isBookmarked = bookmarkChannelIds.includes(channelId[1].toString()) && checkLogin();
+        const bookmarkColor = isBookmarked ? "green" : "#007bff";
+
+        bookmarkHTML = `
+            <span data-channel-id="${channelId[1]}" style="position: absolute; top: 10px; left: 10px; background-color: ${bookmarkColor}; color: white; padding: 5px; border-radius: 5px; font-size: 12px; cursor: pointer;" onclick="bookmarkChannel(${channelId[1]}, '${channel.title}')">
+                    <i class="fas fa-bookmark" style="margin-left: 3px; margin-right: 3px;"></i> 
+            </span>
+        `;
+
+        hd_html += bookmarkHTML;
+
+
+
+
+
 
         searchContainer.innerHTML += `
             <div class="col-md-2" bis_skin_checked="1">
@@ -623,6 +939,7 @@ function renderSearchPage(channels, searchQuery) {
 
                     <div class="card-body" bis_skin_checked="1">
                         <p class="card-text">${channel.title}</p>
+                        ${channelNumberHTML}
                         <a href="schedule.html?id=${channelId[1]}&date=${getCurrentDate()}" class="btn btn-primary">View Details</a>
                     </div>
                 </div>

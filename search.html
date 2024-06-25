@@ -6,6 +6,8 @@
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
         id="bootstrap-css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         table {
             width: 100%;
@@ -101,6 +103,13 @@
         body {
             font-family: 'Lexend Deca', cursive !important;
         }
+
+        .dropdown-menu {
+            right: 0;
+            /* Align the dropdown menu to the right of the parent container */
+            left: auto;
+            /* Prevent left alignment */
+        }
     </style>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -123,6 +132,11 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="index.html">Home</a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="channel-listing.html">TV Channels Listing</a>
+                </li>
+
 
 
                 <li class="nav-item dropdown">
@@ -204,9 +218,16 @@
 
         <h2 id="searchTitle">
             Search query for</h2>
-        </br>
 
-        <div class="row mt-2" id="searchContainer">
+        <div id="bookmarkToast" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+
+            <div id="toastMessage">
+
+            </div>
+
+        </div>
+
+        <div class="row mt-4" id="searchContainer">
 
             <div class="card" style="width: 100%">
                 <div class="card-body">
@@ -229,17 +250,11 @@
     </footer>
 
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
-
-    <!-- Bootstrap JS -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
 
 </body>
 
