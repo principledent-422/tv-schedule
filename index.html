@@ -103,6 +103,15 @@
         }
     </style>
 
+    <style>
+        .dropdown-menu {
+            right: 0;
+            /* Align the dropdown menu to the right of the parent container */
+            left: auto;
+            /* Prevent left alignment */
+        }
+    </style>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -182,10 +191,23 @@
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
 
+            <button class="btn btn-outline-danger" id="loginButton" style="margin-left: 10px;" type="button"
+                onclick="">Login</button>
 
 
+            <div class="dropdown">
+                <a class="navbar-brand pl-3" id="navProfilePicture" href="#" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navProfilePicture">
+                    <a class="dropdown-item" href="profile.html">Profile</a>
+                    <a class="dropdown-item" href="settings.html">Settings</a>
+                    <a class="dropdown-item" href="logout.html">Logout</a>
+                </div>
+            </div>
+
         </div>
-        </div>
+
     </nav>
 
 

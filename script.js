@@ -7,7 +7,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log(filename)
 
+    if (checkLogin() && !filename.includes('logout')) {
 
+        const loginButton = document.querySelector('#loginButton')
+        loginButton.remove();
+
+        const navProfilePicture = document.querySelector('#navProfilePicture');
+        navProfilePicture.innerHTML = `
+         <img src="${localStorage.getItem('picture')}" width="30" height="30"
+                    alt="">
+        `
+    }
+    else {
+        const navProfilePicture = document.querySelector('#navProfilePicture');
+        console.log(navProfilePicture);
+        try {
+            document.querySelector('#loginButton').onclick = function () {
+                location.href = 'https://principledent422-schedule-api.vercel.app/login/google';
+            };
+            navProfilePicture.remove();
+        }
+        catch (error) {
+
+        }
+    }
 
     if (filename.includes('schedule')) {
         handleSchedulePage();
@@ -30,6 +53,13 @@ document.addEventListener("DOMContentLoaded", function () {
         handleSearchPage();
     }
 
+    else if (filename.includes('login')) {
+        handleLoginPage();
+    }
+    else if (filename.includes('logout')) {
+        console.log("logout page")
+        logoutUser()
+    }
     else {
         handleMainPage();
     }
@@ -256,8 +286,43 @@ async function handleSearchPage() {
 
 }
 
+async function handleLoginPage() {
+
+    const params = getQueryParams();
+
+    if (params.userid === '') {
+
+    }
+    else {
+        await loginUser(params.userid);
+    }
+}
+
+function checkLogin() {
+    if (localStorage.getItem('email')) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+async function loginUser(userid) {
+    const data = await fetchData(`/get-user-details?userid=${userid}`);
+
+    for (const [key, value] of Object.entries(data[0])) {
+
+        localStorage.setItem(key, value);
+    }
+    // const redirectURL = `${window.location.pathname.split["/"]}`
+    window.location.href = window.location.pathname.replace("login.html", "index.html")
+}
 
 
+function logoutUser() {
+    localStorage.clear();
+    window.location.href = window.location.pathname.replace("logout.html", "index.html")
+}
 
 function renderHomePageChannels(channels) {
     const channelContainer = document.querySelector("#channelContainer");
