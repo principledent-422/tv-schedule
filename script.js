@@ -395,7 +395,7 @@ async function handleMainPage() {
     
                     <div class="row g-0">
                         <div class="col-md-2" style="max-width:200px">
-                            <img src="${meta.boxCoverImage}" width='100%'
+                            <img src="https://mediaready.videoready.tv/tatasky/image/fetch/f_auto,fl_lossy,q_auto,dpr_1.5,h_503,w_890/${meta.boxCoverImage}" width='100%'
                                 style='float:left;margin:20px;'>
                         </div>
                         <div class="col-md-7">
@@ -405,7 +405,7 @@ async function handleMainPage() {
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <img src="${channelMeta.logo}" width='100%'
+                            <img src="https://mediaready.videoready.tv/tatasky/image/fetch/f_auto,fl_lossy,q_auto,dpr_1.5/${channelMeta.logo}" width='100%'
                                 style='float:left;margin:20px;'>
                         </div>
                     </div>
