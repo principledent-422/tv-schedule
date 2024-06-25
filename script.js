@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log(filename)
 
-    if (checkLogin() && !filename.includes('logout')) {
+    if (checkLogin() && !filename.includes('logout') && !filename.includes('login')) {
 
         const loginButton = document.querySelector('#loginButton')
         loginButton.remove();
