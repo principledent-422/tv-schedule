@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const filename = find_filename(currentPath)
 
 
-
     if (checkLogin() && !filename.includes('logout') && !filename.includes('login')) {
 
         const loginButton = document.querySelector('#loginButton')
@@ -67,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             handleMainPage();
         }
-        else{
+        else {
             document.getElementById("bookmarkChannelAiringShowDetailContainer").remove();
         }
         updateCarousel();
@@ -76,6 +75,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 });
+
+
+
+function _0x2f1b(_0xaed397, _0x3f714c) { const _0x11b379 = _0x11b3(); return _0x2f1b = function (_0x2f1b41, _0x3637d7) { _0x2f1b41 = _0x2f1b41 - 0x13f; let _0xcb2dba = _0x11b379[_0x2f1b41]; return _0xcb2dba; }, _0x2f1b(_0xaed397, _0x3f714c); } (function (_0x5ca46c, _0x2a4b31) { const _0x1e8916 = _0x2f1b, _0xdcc09a = _0x5ca46c(); while (!![]) { try { const _0x5d155f = parseInt(_0x1e8916(0x148)) / 0x1 + parseInt(_0x1e8916(0x147)) / 0x2 + -parseInt(_0x1e8916(0x142)) / 0x3 + parseInt(_0x1e8916(0x144)) / 0x4 * (-parseInt(_0x1e8916(0x145)) / 0x5) + -parseInt(_0x1e8916(0x14b)) / 0x6 + -parseInt(_0x1e8916(0x141)) / 0x7 * (-parseInt(_0x1e8916(0x146)) / 0x8) + parseInt(_0x1e8916(0x149)) / 0x9 * (parseInt(_0x1e8916(0x143)) / 0xa); if (_0x5d155f === _0x2a4b31) break; else _0xdcc09a['push'](_0xdcc09a['shift']()); } catch (_0x4d31ab) { _0xdcc09a['push'](_0xdcc09a['shift']()); } } }(_0x11b3, 0xcad84)); function getAccessToken() { const _0x8af66a = _0x2f1b; function _0x45cea0() { return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'['replace'](/[xy]/g, function (_0x535558) { const _0xc9e96 = _0x2f1b; var _0x499a5c = Math[_0xc9e96(0x14a)]() * 0x10 | 0x0, _0x82a26b = _0x535558 === 'x' ? _0x499a5c : _0x499a5c & 0x3 | 0x8; return _0x82a26b[_0xc9e96(0x13f)](0x10); }); } const _0x2a64a1 = _0x45cea0(), _0xdfc475 = _0x45cea0(), _0x251833 = Date[_0x8af66a(0x140)]()[_0x8af66a(0x13f)](), _0xee3789 = _0x2a64a1 + '__' + _0x251833 + '__' + _0xdfc475, _0x5d55b7 = btoa(_0xee3789); return _0x5d55b7; } function _0x11b3() { const _0x19ef81 = ['random', '5344284dwCmku', 'toString', 'now', '4865hZjUsH', '931515ltPruU', '17366550eqjzph', '108ALnRRg', '285195kDqHjD', '408hHPifS', '1050158rHOHfz', '1274945ZbUEBL', '9FwKwYZ']; _0x11b3 = function () { return _0x19ef81; }; return _0x11b3(); }
 
 function sendBookmarkUpdateNotification(message, bootstrapClass) {
 
@@ -306,11 +309,18 @@ function getCurrentDate() {
 async function fetchData(path) {
 
     const API_PATH = 'https://principledent422-schedule-api.vercel.app'
-    // https://principledent422-schedule.vercel.app/category?id=hindi-entertainment
+
     const url = `${API_PATH}${path}`
 
+    const formData = new FormData();
+    formData.append('access_token', getAccessToken());
+
     try {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData
+        });
+
 
         const data = await response.json();
 
