@@ -534,6 +534,12 @@ async function loginUser(userid) {
 
 
 function logoutUser() {
+    const to_logout_items = ['id', 'created_time', 'picture', 'email', 'last_edited_time', 'userid', 'name']
+
+    to_logout_items.forEach((item, index) => {
+
+        localStorage.removeItem(item)
+    })
     localStorage.clear();
 
     if (window.location.pathname.includes('html')) {
