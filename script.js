@@ -67,6 +67,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             handleMainPage();
         }
+        else{
+            document.getElementById("bookmarkChannelAiringShowDetailContainer").remove();
+        }
         updateCarousel();
     }
 
@@ -174,8 +177,9 @@ function buildScheduleButtons(params) {
     const previousButtons = document.querySelector('#previousButtons')
     const nextButtons = document.querySelector('#nextButtons')
 
-    const scheduleButtonLoader = document.querySelector(".scheduleButtonLoader")
-    scheduleButtonLoader.remove()
+    nextButtons.innerHTML = "";
+    previousButtons.innerHTML = "";
+
 
 
     previous.forEach((value, index) => {
@@ -351,8 +355,6 @@ async function handleMainPage() {
 
     const bookmarkChannelAiringShowDetailContainer = document.querySelector("#bookmarkChannelAiringShowDetailContainer");
 
-    bookmarkChannelAiringShowDetailContainer.innerHTML = `
-    <div class = "loader"></div>`;
     let bookmarkChannelIds
     bookmarkChannelIds = localStorage.getItem('bookmarkChannelIds')
 
@@ -379,7 +381,7 @@ async function handleMainPage() {
         const meta = data.meta[0]
         const channelMeta = data.channelMeta
 
-        bookmarkChannelAiringShowDetailContainer.innerHTML = "";
+        bookmarkChannelAiringShowDetailContainer.innerHTML = ``;
 
 
 
@@ -625,7 +627,7 @@ function renderSchedulePage(data, params) {
 
         scheduleContainer.innerHTML += `
          <div class="col-md-3 mt-4">
-        <div class="card">
+            <div class="card">
 
             <div style="position: relative;">
                     ${episodeHTMLFinal}
@@ -641,7 +643,7 @@ function renderSchedulePage(data, params) {
                 
             </div>
         </div>
-    </div>
+        
         `
     });
 

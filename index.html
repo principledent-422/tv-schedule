@@ -110,6 +110,64 @@
             left: auto;
             /* Prevent left alignment */
         }
+
+
+        /* Skeleton Loader CSS */
+        @keyframes skeleton-loading {
+            0% {
+                background-color: #e0e0e0;
+            }
+
+            50% {
+                background-color: #c0c0c0;
+            }
+
+            100% {
+                background-color: #e0e0e0;
+            }
+        }
+
+        .skeleton {
+            animation: skeleton-loading 1.5s infinite;
+        }
+
+        .skeleton-img {
+            width: 100%;
+            height: 100px;
+
+            background-color: #e0e0e0;
+        }
+
+        .skeleton-text {
+            height: 20px;
+            /* Adjust height as needed */
+            margin-bottom: 10px;
+            background-color: #e0e0e0;
+
+        }
+
+        .skeleton-textlast {
+            height: 20px;
+            /* Adjust height as needed */
+            margin-bottom: 10px;
+            margin-right: 220px;
+            background-color: #e0e0e0;
+
+        }
+
+        .skeleton-title {
+            height: 30px;
+            /* Adjust height as needed */
+            margin-bottom: 10px;
+            margin-right: 130px;
+            background-color: #e0e0e0;
+        }
+
+        .skeleton-carousel {
+            height: 330px;
+            margin-bottom: 40px;
+            background-color: #e0e0e0;
+        }
     </style>
 
 
@@ -224,7 +282,7 @@
     <div class="container-fluid my-5">
         <div class="row">
             <div class="col-12">
-                <div id="top-rated-slider" class="carousel slide" data-ride="carousel">
+                <div id="top-rated-slider" class="carousel slide skeleton skeleton-carousel" data-ride="carousel">
                     <div class="carousel-indicators"> <button type="button" data-target="#top-rated-slider"
                             data-slide-to="0" class="active" aria-current="true" aria-label="Slide 0"></button> <button
                             type="button" data-target="#top-rated-slider" data-slide-to="1" class="" aria-current="true"
@@ -269,9 +327,32 @@
 
 
 
+
         <div id="bookmarkChannelAiringShowDetailContainer">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5>Currenlty airing on one of your bookmarked channel</h5>
+                </div>
+                <div class="row g-0" bis_skin_checked="1">
+                    <div class="col-md-2" style="max-width:200px" bis_skin_checked="1">
+                        <img width="100%" style="float:left;margin:20px;" class="skeleton skeleton-img">
+                    </div>
+                    <div class="col-md-7" bis_skin_checked="1">
+                        <div class="card-body" style="background:transparent" bis_skin_checked="1">
+                            <h5 class="card-title skeleton skeleton-title"></h5>
+                            <p class="card-text skeleton skeleton-text"></p>
+                            <p class="card-text skeleton skeleton-text"></p>
+                            <p class="card-text skeleton skeleton-text"></p>
+                            <p class="card-text skeleton skeleton-text"></p>
+                            <p class="card-text skeleton skeleton-textlast"></p>
 
-
+                        </div>
+                    </div>
+                    <div class="col-md-2" bis_skin_checked="1">
+                        <img width="100%" style="float:left;margin:20px;" class="skeleton skeleton-img">
+                    </div>
+                </div>
+            </div>
         </div>
 
 
@@ -419,7 +500,8 @@
                             <h5 class="card-title" style="margin-bottom: 25px;">Stra Plus HD</h5>
 
 
-                            <a href="schedule.html?id=8&amp;date=25-06-2024" class="btn btn-primary">View Details</a>
+                            <a href="schedule.html?id=8&amp;date=25-06-2024" class="btn btn-primary">View
+                                Details</a>
                         </div>
                     </div>
                 </div>
@@ -463,7 +545,8 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="card-text">CH 719 <img
                                         src="https://play-lh.googleusercontent.com/PTLQRc7a8vRjs8fmM7hRI36s7gGYalxIFd80xZDvYkIl91d709fcl4-UH9vZbxWDGG8"
-                                        style="max-width: 25px; height: auto; margin-left: 10px;" class="img-fluid"></p>
+                                        style="max-width: 25px; height: auto; margin-left: 10px;" class="img-fluid">
+                                </p>
                             </div>
                             <br>
 
