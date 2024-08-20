@@ -7,11 +7,11 @@
 
 <p align="center">
 <h3 align="left">Home Page<h3>
-  <img src="https://i.imgur.com/oHs9SWP.png" alt="Home Page">
+  <img src="" alt="Home Page">
   <br>
   
 <h3 align="left">Searching shows by genre (Knowledge in this case)<h3> 
-  <img src="https://i.imgur.com/HqHztHr.pngg" alt="Genre based sorting">
+  <img src="https://i.imgur.com/HqHztHr.png" alt="Genre based sorting">
   <br>
 
 <h3 align="left">TV Schedule (Discovery Science in our case)<h3>
@@ -30,6 +30,12 @@
 - **Language Options**: View TV schedules in multiple languages including Hindi, English and other regional languages.
 - **Channel-Specific Schedules**: Get detailed schedules for specific TV channels.
 
+### ➕ Additional Features upon Login
+
+- **Bookmark**: Get an ability to bookmark your favorite channels to directly view their schedule in the Home Page
+- **Episode Number**: Retrieve the episode numbers for all available shows.
+- **Channel Number**: Retrieve the channel numbers for all shows on Tata Play. 
+
 ## 🛠️ How to Use
 
 - **Select a Genre**: Choose from genres such as Entertainment, Sports, News, etc.
@@ -45,3 +51,7 @@ We welcome feedback and contributions to improve the website. Here’s how you c
 2. **Clone the Repository**: Clone your forked repository to your local machine.
    ```bash
    git clone https://github.com/your-username/tv-schedule-india.git
+
+## 🙏 Special Thanks to 
+
+ [aditya76-git](https://github.com/aditya76-git)
