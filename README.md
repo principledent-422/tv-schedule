@@ -54,4 +54,4 @@ We welcome feedback and contributions to improve the website. Here’s how you c
 
 ## 🙏 Special Thanks to 
 
- [aditya76-git](https://github.com/aditya76-git)
+- [aditya76-git](https://github.com/aditya76-git)
