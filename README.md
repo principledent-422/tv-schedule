@@ -1,27 +1,42 @@
 <h1 align="center">TV Schedule - India</h1>
 
-<br>
-<h3 align="center">Welcome to the TV Schedule India!<h3>
+<p align="center">
+    <img src="https://i.imgur.com/9tbLIfX.png" alt="daily-diary-web">
+</p>
 
-## 🖼️ Preview
+
+
+
+## 🚀 Live Demo
+
+Experience the app in action! Visit the live demo:
+
+[tv-schedule-india.netlify.app](https://tv-schedule-india.netlify.app/)
+
+## 📸 Screenshots
 
 <p align="center">
 <h3 align="left">Home Page<h3>
-  <img src="" alt="Home Page">
+  <img src="https://i.imgur.com/2QXMI9d.png" alt="Home Page">
   <br>
   
-<h3 align="left">Searching shows by genre (Knowledge in this case)<h3> 
-  <img src="https://i.imgur.com/HqHztHr.png" alt="Genre based sorting">
+<h3 align="left">Searching shows by genre (eg. Knowledge)<h3> 
+  <img src="https://i.imgur.com/abzK7Ii.png" alt="Genre based sorting">
   <br>
 
-<h3 align="left">TV Schedule (Discovery Science in our case)<h3>
-  <img src="https://i.imgur.com/emrINQc.png" alt="Discovery Science schedule">
+<h3 align="left">TV Schedule (eg. Discovery Science)<h3>
+  <img src="https://i.imgur.com/CmmudCi.png" alt="Discovery Science schedule">
+  <br>
+
+<h3 align="left">Search your favourite Channels! (eg. Discovery)<h3>
+  <img src="https://i.imgur.com/mxipWCg.png" alt="Discovery seach query results">
 </p>
 <br>
 
-`TV Schedule - India` is a platform that helps you keep track of your favorite TV shows across various channels in India.
 
-<br>
+## 📝 Description
+
+`TV Schedule - India` is a platform that helps you keep track of your favorite TV shows across various channels in India.
 
 ## ✨ Features
 
@@ -50,7 +65,7 @@ We welcome feedback and contributions to improve the website. Here’s how you c
 1. **Fork the Repository**: Click the 'Fork' button at the top right corner of the repository page.
 2. **Clone the Repository**: Clone your forked repository to your local machine.
    ```bash
-   git clone https://github.com/your-username/tv-schedule-india.git
+   git clone https://github.com/principledent-422/tv-schedule-india.git
 
 ## 🙏 Special Thanks to 
 
